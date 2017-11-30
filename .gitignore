@@ -30,6 +30,10 @@
 /web/bundles/
 /web/uploads/
 
+# Vendors this proyect
+/vendor
+/vendor/*
+
 # PHPUnit
 /app/phpunit.xml
 /phpunit.xml
@@ -39,3 +43,7 @@
 
 # Backup entities generated with doctrine:generate:entities command
 **/Entity/*~
+
+# Config file proyect IDE
+.idea
+.idea/*
