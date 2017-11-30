@@ -1,0 +1,11 @@
+imports:
+    - { resource: "@AppBundle/Resources/config/services.yml" }
+    - { resource: "@BackBundle/Resources/config/services.yml" }
+
+parameters:
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true

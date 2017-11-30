@@ -1,0 +1,4 @@
+services:
+    app-helpers:
+       class: AppBundle\Resources\config\services\Helpers
+       arguments: ["null"]
