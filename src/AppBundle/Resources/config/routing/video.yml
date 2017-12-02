@@ -1,0 +1,11 @@
+user-new:
+    path:     /new
+    defaults: { _controller: AppBundle:Video:new }
+    methods:
+      - POST
+
+user-edit:
+    path:     /edit/{id}
+    defaults: { _controller: AppBundle:Video:edit, id: null }
+    methods:
+      - POST

@@ -1,3 +1,12 @@
 default:
     resource: "@AppBundle/Resources/config/routing/default.yml"
     prefix:   /
+
+user:
+    resource: "@AppBundle/Resources/config/routing/user.yml"
+    prefix:   /user
+
+video:
+    resource: "@AppBundle/Resources/config/routing/video.yml"
+    prefix:   /video
+

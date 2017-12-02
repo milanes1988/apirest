@@ -5,10 +5,13 @@ default:
 login:
     path:     /login
     defaults: { _controller: AppBundle:Default:login }
-    methods:  [POST]
+    methods:
+      - POST
 
 test:
     path:     /test
     defaults: { _controller: AppBundle:Default:test }
-    methods:  [GET]
+    methods:
+      - GET
+      - POST
 

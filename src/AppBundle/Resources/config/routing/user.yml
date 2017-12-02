@@ -1,0 +1,17 @@
+user-new:
+    path:     /new
+    defaults: { _controller: AppBundle:User:new }
+    methods:
+      - POST
+
+user-edit:
+    path:     /edit
+    defaults: { _controller: AppBundle:User:edit }
+    methods:
+      - POST
+
+user-image:
+    path:     /upload
+    defaults: { _controller: AppBundle:User:upload }
+    methods:
+      - POST
