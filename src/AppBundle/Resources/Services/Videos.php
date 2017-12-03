@@ -28,17 +28,18 @@ class Videos
         $this->validator = $validator;
         $this->helpers = $helpers;
         $this->jwtAuth = $jwtAuth;
-        $this->arraySucces = array('status' => 'Success' ,'code' => '200', 'data' => '');
-        $this->arrayError = array('status' => 'Success' ,'code' => '400', 'data' => '');
+        $this->arraySucces = array('status' => 'Success', 'code' => '200', 'data' => '');
+        $this->arrayError = array('status' => 'Error', 'code' => '400', 'data' => '');
     }
 
-    public function newVideo(Request $request){
+    public function newVideo(Request $request)
+    {
         $json = $request->get('json', null);
         $hash = $request->get('authorization', null);
         $authCheck = $this->jwtAuth->authCheck($hash);
 
-        if ($authCheck){
-            if($json != null){
+        if ($authCheck) {
+            if ($json != null) {
                 $params = json_decode($json);
                 $identityUser = $this->jwtAuth->authCheck($hash, true);
 
@@ -53,7 +54,7 @@ class Videos
                 $description = (isset($params->description)) ? $params->description : null;
                 $status = (isset($params->status)) ? $params->status : null;
 
-                if($userId != null && $title != null){
+                if ($userId != null && $title != null) {
 
                     $user = $this->manager->getRepository('BackBundle:User')->findOneBy(
                         array(
@@ -83,29 +84,29 @@ class Videos
 
                     $this->arraySucces['data'] = $newVideo;
                     return $this->helpers->serializerJson($this->arraySucces);
-                }else{
+                } else {
                     $this->arrayError['data'] = 'Video not created. Please try again.';
                     return $this->helpers->serializerJson($this->arrayError);
                 }
-            }else{
+            } else {
                 $this->arrayError['data'] = 'Json contain format invalid. Please try again.';
                 return $this->helpers->serializerJson($this->arrayError);
             }
-        }else{
+        } else {
             $this->arrayError['data'] = 'Token is not valid. Please try again.';
             return $this->helpers->serializerJson($this->arrayError);
         }
     }
 
 
-
-    public function editVideo(Request $request, $videoId){
+    public function editVideo(Request $request, $videoId)
+    {
         $json = $request->get('json', null);
         $hash = $request->get('authorization', null);
         $authCheck = $this->jwtAuth->authCheck($hash);
 
-        if ($authCheck){
-            if($json != null){
+        if ($authCheck) {
+            if ($json != null) {
                 $params = json_decode($json);
                 $identityUser = $this->jwtAuth->authCheck($hash, true);
 
@@ -119,7 +120,7 @@ class Videos
                 $description = (isset($params->description)) ? $params->description : null;
                 $status = (isset($params->status)) ? $params->status : null;
 
-                if($userId != null && $title != null){
+                if ($userId != null && $title != null) {
 
 
                     $video = $this->manager->getRepository('BackBundle:Video')->findOneBy(
@@ -128,7 +129,7 @@ class Videos
                         )
                     );
 
-                    if (isset($identityUser->sub) && $identityUser->sub == $video->getUser()->getId()){
+                    if (isset($identityUser->sub) && $identityUser->sub == $video->getUser()->getId()) {
                         $video->setTitle($title);
                         $video->setDescription($description);
                         $video->setStatus($status);
@@ -137,22 +138,98 @@ class Videos
                         $this->manager->persist($video);
                         $this->manager->flush();
 
-                        $this->arraySucces['data'] = 'Video <<'.$title.'>> is udpated.';
+                        $this->arraySucces['data'] = 'Video <<' . $title . '>> is udpated.';
                         return $this->helpers->serializerJson($this->arraySucces);
 
-                    }else{
+                    } else {
                         $this->arrayError['data'] = 'Not permision is the video. Please try again.';
                         return $this->helpers->serializerJson($this->arrayError);
                     }
-                }else{
+                } else {
                     $this->arrayError['data'] = 'Video not update. Please try again.';
                     return $this->helpers->serializerJson($this->arrayError);
                 }
-            }else{
+            } else {
                 $this->arrayError['data'] = 'Json contain format invalid. Please try again.';
                 return $this->helpers->serializerJson($this->arrayError);
             }
-        }else{
+        } else {
+            $this->arrayError['data'] = 'Token is not valid. Please try again.';
+            return $this->helpers->serializerJson($this->arrayError);
+        }
+    }
+
+
+    public function uploadVideo(Request $request, $videoId)
+    {
+        $json = $request->get('json', null);
+        $hash = $request->get('authorization', null);
+        $authCheck = $this->jwtAuth->authCheck($hash);
+
+        if ($authCheck) {
+            $params = json_decode($json);
+            $identityUser = $this->jwtAuth->authCheck($hash, true);
+
+            $video = $this->manager->getRepository('BackBundle:Video')->findOneBy(
+                array(
+                    'id' => $videoId
+                )
+            );
+
+            if ($videoId != null && isset($identityUser->sub) && $identityUser->sub == $video->getUser()->getId()) {
+
+                $flagImg = false;
+                $flagVideo = false;
+                $imageFile = $request->files->get('image', null);
+                $videoFile = $request->files->get('video', null);
+                $path = 'uploads/videos/';
+
+                if ($imageFile != null && !empty($imageFile)) {
+                    $ext = $imageFile->guessExtension();
+                    if ($ext == 'png' || $ext == 'jpeg' || $ext == 'jpg') {
+                        $fileName = time() . '.' . $ext;
+                        $pathFile = $path . 'images/video_' . $videoId;
+                        $imageFile->move($pathFile, $fileName);
+
+                        $video->setImage($fileName);
+                        $flagImg = true;
+                    } else {
+                        $this->arrayError['data'] = 'This image fomat not valid. Please try again.';
+                        return $this->helpers->serializerJson($this->arrayError);
+                    }
+                }
+
+                if ($videoFile != null && !empty($videoFile)) {
+                    $ext = $videoFile->guessExtension();
+                    if ($ext == 'avi' || $ext == 'mp4') {
+                        $fileName = time() . '.' . $ext;
+                        $pathFile = $path . 'files/video_' . $videoId;
+                        $videoFile->move($pathFile, $fileName);
+
+                        $video->setVideoPath($fileName);
+                        $flagVideo = true;
+                    } else {
+                        $this->arrayError['data'] = 'This video fomat not valid. Please try again.';
+                        return $this->helpers->serializerJson($this->arrayError);
+                    }
+                }
+                if ($flagImg || $flagVideo) {
+                    $this->manager->persist($video);
+                    $this->manager->flush();
+
+                    $this->arraySucces['data'] = 'File upload for video is success.';
+                    return $this->helpers->serializerJson($this->arraySucces);
+                } else {
+                    $this->arrayError['data'] = 'Error occurred when uploading the files. Please try again.';
+                    return $this->helpers->serializerJson($this->arrayError);
+                }
+
+            } else {
+
+                $this->arrayError['data'] = 'Not permision is the video. Please try again.';
+                return $this->helpers->serializerJson($this->arrayError);
+            }
+        } else {
             $this->arrayError['data'] = 'Token is not valid. Please try again.';
             return $this->helpers->serializerJson($this->arrayError);
         }

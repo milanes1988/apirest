@@ -10,6 +10,7 @@ namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class VideoController extends Controller
@@ -24,5 +25,11 @@ class VideoController extends Controller
     {
         $service = $this->get('app-video');
         return $service->editVideo($request, $id);
+    }
+
+    public function uploadAction(Request $request, $id = null)
+    {
+        $service = $this->get('app-video');
+        return $service->uploadVideo($request, $id);
     }
 }

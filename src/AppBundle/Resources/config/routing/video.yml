@@ -9,3 +9,15 @@ user-edit:
     defaults: { _controller: AppBundle:Video:edit, id: null }
     methods:
       - POST
+
+user-upload-img:
+    path:     /upload-image/{id}
+    defaults: { _controller: AppBundle:Video:upload, id: null }
+    methods:
+      - POST
+
+user-upload-video:
+    path:     /upload-video/{id}
+    defaults: { _controller: AppBundle:Video:upload, id: null }
+    methods:
+      - POST
