@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: robot
- * Date: 2/12/17
- * Time: 22:54.
- */
 
 namespace AppBundle\Resources\Services;
 
@@ -273,10 +267,8 @@ class Videos
         return $this->helpers->serializerJson($this->arraySucces);
     }
 
-
     public function detailVideo(Request $request, $videoId)
     {
-        
         $video = $this->manager->getRepository('BackBundle:Video')->findOneBy(
             [
                 'id' => $videoId,
@@ -285,26 +277,23 @@ class Videos
 
         $data = $this->arrayError['data'] = 'Video is not finder in aplications';
 
-        if ($video){
+        if ($video) {
             $data = $this->arraySucces['data'] = $video;
         }
 
         return $this->helpers->serializerJson($data);
     }
 
-
-
     public function searchVideo(Request $request, $search)
     {
-
-        if($search != null){
-            $dql = "SELECT v FROM BackendBundle:Video v "
-                . "WHERE v.title LIKE :search OR "
-                . "v.description LIKE :search ORDER BY v.id DESC";
+        if (null !== $search) {
+            $dql = 'SELECT v FROM BackendBundle:Video v '
+                .'WHERE v.title LIKE :search OR '
+                .'v.description LIKE :search ORDER BY v.id DESC';
             $query = $this->manager->createQuery($dql)
-                ->setParameter("search", "%$search%");
-        }else{
-            $dql = "SELECT v FROM BackendBundle:Video v ORDER BY v.id DESC";
+                ->setParameter('search', "%$search%");
+        } else {
+            $dql = 'SELECT v FROM BackendBundle:Video v ORDER BY v.id DESC';
             $query = $this->manager->createQuery($dql);
         }
 

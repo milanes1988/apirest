@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: robot
- * Date: 2/12/17
- * Time: 22:45.
- */
 
 namespace AppBundle\Controller;
 
@@ -54,7 +48,6 @@ class VideoController extends Controller
 
         return $service->detailVideo($request, $id);
     }
-
 
     public function searchAction(Request $request, $search = null)
     {

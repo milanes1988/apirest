@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: robot
- * Date: 2/12/17
- * Time: 1:05.
- */
 
 namespace AppBundle\Resources\Services;
 
@@ -257,7 +251,7 @@ class Users
         $pagination = $this->knpPaginator->paginate($query, $page, $itemsPage);
         $totalItems = $pagination->getTotalItemCount();
 
-        if (count($user) == 1){
+        if (1 === \count($user)) {
             $data = [
                 'status' => 'Success',
                 'code' => '200',
@@ -268,10 +262,9 @@ class Users
             ];
             $data['data']['videos'] = $pagination;
             $data['data']['user'] = $user;
-        }else{
+        } else {
             $data = $this->arrayError['data'] = 'User don\'t exist in aplications';
         }
-
 
         return $this->helpers->serializerJson($data);
     }
