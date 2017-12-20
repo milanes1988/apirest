@@ -3,14 +3,12 @@
  * Created by PhpStorm.
  * User: robot
  * Date: 2/12/17
- * Time: 22:54
+ * Time: 22:54.
  */
 
 namespace AppBundle\Resources\Services;
 
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Validator\Constraints as Assert;
 use BackBundle\Entity\Video;
 
 class Videos
@@ -21,15 +19,17 @@ class Videos
     protected $validator;
     protected $arraySucces;
     protected $arrayError;
+    protected $knpPaginator;
 
-    public function __construct($manager, $validator, $helpers, $jwtAuth)
+    public function __construct($manager, $validator, $helpers, $jwtAuth, $knpPag)
     {
         $this->manager = $manager;
         $this->validator = $validator;
         $this->helpers = $helpers;
         $this->jwtAuth = $jwtAuth;
-        $this->arraySucces = array('status' => 'Success', 'code' => '200', 'data' => '');
-        $this->arrayError = array('status' => 'Error', 'code' => '400', 'data' => '');
+        $this->knpPaginator = $knpPag;
+        $this->arraySucces = ['status' => 'Success', 'code' => '200', 'data' => ''];
+        $this->arrayError = ['status' => 'Error', 'code' => '400', 'data' => ''];
     }
 
     public function newVideo(Request $request)
@@ -39,8 +39,8 @@ class Videos
         $authCheck = $this->jwtAuth->authCheck($hash);
 
         if ($authCheck) {
-            if ($json != null) {
-                $params = json_decode($json);
+            if (null !== $json) {
+                $params = \json_decode($json);
                 $identityUser = $this->jwtAuth->authCheck($hash, true);
 
                 $createAt = new \DateTime();
@@ -48,18 +48,16 @@ class Videos
                 $imagen = null;
                 $pathVideo = null;
 
-
                 $userId = (isset($identityUser->sub)) ? $identityUser->sub : null;
                 $title = (isset($params->title)) ? $params->title : null;
                 $description = (isset($params->description)) ? $params->description : null;
                 $status = (isset($params->status)) ? $params->status : null;
 
-                if ($userId != null && $title != null) {
-
+                if (null !== $userId && null !== $title) {
                     $user = $this->manager->getRepository('BackBundle:User')->findOneBy(
-                        array(
-                            'id' => $userId
-                        )
+                        [
+                            'id' => $userId,
+                        ]
                     );
 
                     $video = new Video();
@@ -74,30 +72,33 @@ class Videos
                     $this->manager->flush();
 
                     $newVideo = $this->manager->getRepository('BackBundle:Video')->findOneBy(
-                        array(
+                        [
                             'user' => $user,
                             'title' => $title,
                             'status' => $status,
-                            'createdAt' => $createAt
-                        )
+                            'createdAt' => $createAt,
+                        ]
                     );
 
                     $this->arraySucces['data'] = $newVideo;
+
                     return $this->helpers->serializerJson($this->arraySucces);
                 } else {
                     $this->arrayError['data'] = 'Video not created. Please try again.';
+
                     return $this->helpers->serializerJson($this->arrayError);
                 }
             } else {
                 $this->arrayError['data'] = 'Json contain format invalid. Please try again.';
+
                 return $this->helpers->serializerJson($this->arrayError);
             }
         } else {
             $this->arrayError['data'] = 'Token is not valid. Please try again.';
+
             return $this->helpers->serializerJson($this->arrayError);
         }
     }
-
 
     public function editVideo(Request $request, $videoId)
     {
@@ -106,30 +107,27 @@ class Videos
         $authCheck = $this->jwtAuth->authCheck($hash);
 
         if ($authCheck) {
-            if ($json != null) {
-                $params = json_decode($json);
+            if (null !== $json) {
+                $params = \json_decode($json);
                 $identityUser = $this->jwtAuth->authCheck($hash, true);
 
                 $updateAt = new \DateTime();
                 $imagen = null;
                 $pathVideo = null;
 
-
                 $userId = (isset($identityUser->sub)) ? $identityUser->sub : null;
                 $title = (isset($params->title)) ? $params->title : null;
                 $description = (isset($params->description)) ? $params->description : null;
                 $status = (isset($params->status)) ? $params->status : null;
 
-                if ($userId != null && $title != null) {
-
-
+                if (null !== $userId && null !== $title) {
                     $video = $this->manager->getRepository('BackBundle:Video')->findOneBy(
-                        array(
-                            'id' => $videoId
-                        )
+                        [
+                            'id' => $videoId,
+                        ]
                     );
 
-                    if (isset($identityUser->sub) && $identityUser->sub == $video->getUser()->getId()) {
+                    if (isset($identityUser->sub) && $identityUser->sub === $video->getUser()->getId()) {
                         $video->setTitle($title);
                         $video->setDescription($description);
                         $video->setStatus($status);
@@ -138,27 +136,30 @@ class Videos
                         $this->manager->persist($video);
                         $this->manager->flush();
 
-                        $this->arraySucces['data'] = 'Video <<' . $title . '>> is udpated.';
-                        return $this->helpers->serializerJson($this->arraySucces);
+                        $this->arraySucces['data'] = 'Video <<'.$title.'>> is udpated.';
 
+                        return $this->helpers->serializerJson($this->arraySucces);
                     } else {
                         $this->arrayError['data'] = 'Not permision is the video. Please try again.';
+
                         return $this->helpers->serializerJson($this->arrayError);
                     }
                 } else {
                     $this->arrayError['data'] = 'Video not update. Please try again.';
+
                     return $this->helpers->serializerJson($this->arrayError);
                 }
             } else {
                 $this->arrayError['data'] = 'Json contain format invalid. Please try again.';
+
                 return $this->helpers->serializerJson($this->arrayError);
             }
         } else {
             $this->arrayError['data'] = 'Token is not valid. Please try again.';
+
             return $this->helpers->serializerJson($this->arrayError);
         }
     }
-
 
     public function uploadVideo(Request $request, $videoId)
     {
@@ -167,49 +168,50 @@ class Videos
         $authCheck = $this->jwtAuth->authCheck($hash);
 
         if ($authCheck) {
-            $params = json_decode($json);
+            $params = \json_decode($json);
             $identityUser = $this->jwtAuth->authCheck($hash, true);
 
             $video = $this->manager->getRepository('BackBundle:Video')->findOneBy(
-                array(
-                    'id' => $videoId
-                )
+                [
+                    'id' => $videoId,
+                ]
             );
 
-            if ($videoId != null && isset($identityUser->sub) && $identityUser->sub == $video->getUser()->getId()) {
-
+            if (null !== $videoId && isset($identityUser->sub) && $identityUser->sub === $video->getUser()->getId()) {
                 $flagImg = false;
                 $flagVideo = false;
                 $imageFile = $request->files->get('image', null);
                 $videoFile = $request->files->get('video', null);
                 $path = 'uploads/videos/';
 
-                if ($imageFile != null && !empty($imageFile)) {
+                if (null !== $imageFile && !empty($imageFile)) {
                     $ext = $imageFile->guessExtension();
-                    if ($ext == 'png' || $ext == 'jpeg' || $ext == 'jpg') {
-                        $fileName = time() . '.' . $ext;
-                        $pathFile = $path . 'images/video_' . $videoId;
+                    if ('png' === $ext || 'jpeg' === $ext || 'jpg' === $ext) {
+                        $fileName = \time().'.'.$ext;
+                        $pathFile = $path.'images/video_'.$videoId;
                         $imageFile->move($pathFile, $fileName);
 
                         $video->setImage($fileName);
                         $flagImg = true;
                     } else {
                         $this->arrayError['data'] = 'This image fomat not valid. Please try again.';
+
                         return $this->helpers->serializerJson($this->arrayError);
                     }
                 }
 
-                if ($videoFile != null && !empty($videoFile)) {
+                if (null !== $videoFile && !empty($videoFile)) {
                     $ext = $videoFile->guessExtension();
-                    if ($ext == 'avi' || $ext == 'mp4') {
-                        $fileName = time() . '.' . $ext;
-                        $pathFile = $path . 'files/video_' . $videoId;
+                    if ('avi' === $ext || 'mp4' === $ext) {
+                        $fileName = \time().'.'.$ext;
+                        $pathFile = $path.'files/video_'.$videoId;
                         $videoFile->move($pathFile, $fileName);
 
                         $video->setVideoPath($fileName);
                         $flagVideo = true;
                     } else {
                         $this->arrayError['data'] = 'This video fomat not valid. Please try again.';
+
                         return $this->helpers->serializerJson($this->arrayError);
                     }
                 }
@@ -218,21 +220,109 @@ class Videos
                     $this->manager->flush();
 
                     $this->arraySucces['data'] = 'File upload for video is success.';
+
                     return $this->helpers->serializerJson($this->arraySucces);
                 } else {
                     $this->arrayError['data'] = 'Error occurred when uploading the files. Please try again.';
+
                     return $this->helpers->serializerJson($this->arrayError);
                 }
-
             } else {
-
                 $this->arrayError['data'] = 'Not permision is the video. Please try again.';
+
                 return $this->helpers->serializerJson($this->arrayError);
             }
         } else {
             $this->arrayError['data'] = 'Token is not valid. Please try again.';
+
             return $this->helpers->serializerJson($this->arrayError);
         }
     }
 
+    public function listVideo(Request $request)
+    {
+        $dql = 'SELECT v FROM BackBundle:Video v ORDER BY v.id';
+        $query = $this->manager->createQuery($dql);
+
+        $page = $request->query->getInt('page', 1);
+        $itemsPage = 6;
+        $pagination = $this->knpPaginator->paginate($query, $page, $itemsPage);
+        $totalItems = $pagination->getTotalItemCount();
+
+        $data = [
+            'status' => 'Success',
+            'code' => '200',
+            'totalItems' => $totalItems,
+            'pageActuality' => $page,
+            'itemsPerPage' => $itemsPage,
+            'totalPage' => \ceil($totalItems / $itemsPage),
+            'data' => $pagination,
+        ];
+
+        return $this->helpers->serializerJson($data);
+    }
+
+    public function lastVideo(Request $request)
+    {
+        $dql = 'SELECT v FROM BackBundle:Video v ORDER BY v.createdAt DESC';
+        $query = $this->manager->createQuery($dql)->setMaxResults(5);
+        $videos = $query->getResult();
+
+        $this->arraySucces['data'] = $videos;
+
+        return $this->helpers->serializerJson($this->arraySucces);
+    }
+
+
+    public function detailVideo(Request $request, $videoId)
+    {
+        
+        $video = $this->manager->getRepository('BackBundle:Video')->findOneBy(
+            [
+                'id' => $videoId,
+            ]
+        );
+
+        $data = $this->arrayError['data'] = 'Video is not finder in aplications';
+
+        if ($video){
+            $data = $this->arraySucces['data'] = $video;
+        }
+
+        return $this->helpers->serializerJson($data);
+    }
+
+
+
+    public function searchVideo(Request $request, $search)
+    {
+
+        if($search != null){
+            $dql = "SELECT v FROM BackendBundle:Video v "
+                . "WHERE v.title LIKE :search OR "
+                . "v.description LIKE :search ORDER BY v.id DESC";
+            $query = $this->manager->createQuery($dql)
+                ->setParameter("search", "%$search%");
+        }else{
+            $dql = "SELECT v FROM BackendBundle:Video v ORDER BY v.id DESC";
+            $query = $this->manager->createQuery($dql);
+        }
+
+        $page = $request->query->getInt('page', 1);
+        $itemsPage = 6;
+        $pagination = $this->knpPaginator->paginate($query, $page, $itemsPage);
+        $totalItems = $pagination->getTotalItemCount();
+
+        $data = [
+            'status' => 'Success',
+            'code' => '200',
+            'totalItems' => $totalItems,
+            'pageActuality' => $page,
+            'itemsPerPage' => $itemsPage,
+            'totalPage' => \ceil($totalItems / $itemsPage),
+            'data' => $pagination,
+        ];
+
+        return $this->helpers->serializerJson($data);
+    }
 }

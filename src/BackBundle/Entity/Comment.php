@@ -5,7 +5,7 @@ namespace BackBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Comment
+ * Comment.
  *
  * @ORM\Table(name="comments", indexes={@ORM\Index(name="fk_comment_video", columns={"video_id"}), @ORM\Index(name="fk_comment_user", columns={"user_id"})})
  * @ORM\Entity
@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Comment
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -55,12 +55,10 @@ class Comment
      */
     private $video;
 
-
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -68,7 +66,7 @@ class Comment
     }
 
     /**
-     * Set body
+     * Set body.
      *
      * @param string $body
      *
@@ -82,7 +80,7 @@ class Comment
     }
 
     /**
-     * Get body
+     * Get body.
      *
      * @return string
      */
@@ -92,7 +90,7 @@ class Comment
     }
 
     /**
-     * Set createdAt
+     * Set createdAt.
      *
      * @param \DateTime $createdAt
      *
@@ -106,7 +104,7 @@ class Comment
     }
 
     /**
-     * Get createdAt
+     * Get createdAt.
      *
      * @return \DateTime
      */
@@ -116,7 +114,7 @@ class Comment
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param \BackBundle\Entity\User $user
      *
@@ -130,7 +128,7 @@ class Comment
     }
 
     /**
-     * Get user
+     * Get user.
      *
      * @return \BackBundle\Entity\User
      */
@@ -140,7 +138,7 @@ class Comment
     }
 
     /**
-     * Set video
+     * Set video.
      *
      * @param \BackBundle\Entity\Video $video
      *
@@ -154,7 +152,7 @@ class Comment
     }
 
     /**
-     * Get video
+     * Get video.
      *
      * @return \BackBundle\Entity\Video
      */

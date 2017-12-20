@@ -5,7 +5,7 @@ namespace BackBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Video
+ * Video.
  *
  * @ORM\Table(name="videos", indexes={@ORM\Index(name="fk_videos_users", columns={"user_id"})})
  * @ORM\Entity
@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Video
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -80,12 +80,10 @@ class Video
      */
     private $user;
 
-
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -93,7 +91,7 @@ class Video
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
      *
@@ -107,7 +105,7 @@ class Video
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -117,7 +115,7 @@ class Video
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
      *
@@ -131,7 +129,7 @@ class Video
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -141,7 +139,7 @@ class Video
     }
 
     /**
-     * Set status
+     * Set status.
      *
      * @param string $status
      *
@@ -155,7 +153,7 @@ class Video
     }
 
     /**
-     * Get status
+     * Get status.
      *
      * @return string
      */
@@ -165,7 +163,7 @@ class Video
     }
 
     /**
-     * Set image
+     * Set image.
      *
      * @param string $image
      *
@@ -179,7 +177,7 @@ class Video
     }
 
     /**
-     * Get image
+     * Get image.
      *
      * @return string
      */
@@ -189,7 +187,7 @@ class Video
     }
 
     /**
-     * Set videoPath
+     * Set videoPath.
      *
      * @param string $videoPath
      *
@@ -203,7 +201,7 @@ class Video
     }
 
     /**
-     * Get videoPath
+     * Get videoPath.
      *
      * @return string
      */
@@ -213,7 +211,7 @@ class Video
     }
 
     /**
-     * Set createdAt
+     * Set createdAt.
      *
      * @param \DateTime $createdAt
      *
@@ -227,7 +225,7 @@ class Video
     }
 
     /**
-     * Get createdAt
+     * Get createdAt.
      *
      * @return \DateTime
      */
@@ -237,7 +235,7 @@ class Video
     }
 
     /**
-     * Set updatedAt
+     * Set updatedAt.
      *
      * @param \DateTime $updatedAt
      *
@@ -251,7 +249,7 @@ class Video
     }
 
     /**
-     * Get updatedAt
+     * Get updatedAt.
      *
      * @return \DateTime
      */
@@ -261,7 +259,7 @@ class Video
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param \BackBundle\Entity\User $user
      *
@@ -275,7 +273,7 @@ class Video
     }
 
     /**
-     * Get user
+     * Get user.
      *
      * @return \BackBundle\Entity\User
      */

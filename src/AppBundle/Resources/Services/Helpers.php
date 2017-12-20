@@ -3,11 +3,10 @@
  * Created by PhpStorm.
  * User: robot
  * Date: 30/11/17
- * Time: 9:50
+ * Time: 9:50.
  */
 
 namespace AppBundle\Resources\Services;
-
 
 use Firebase\JWT\JWT;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,8 +18,8 @@ class Helpers
 {
     public function serializerJson($data)
     {
-        $nomalizer = array(new GetSetMethodNormalizer());
-        $encoders = array('json' => new JsonEncoder());
+        $nomalizer = [new GetSetMethodNormalizer()];
+        $encoders = ['json' => new JsonEncoder()];
 
         $serializer = new Serializer($nomalizer, $encoders);
         $jsonData = $serializer->serialize($data, 'json');
@@ -28,26 +27,30 @@ class Helpers
         $response = new Response();
         $response->setContent($jsonData);
         $response->headers->set('Content-Type', 'application/json');
+
         return $response;
     }
 
-    public function checkToken($jwt, $key , $getIdentity = false){
+    public function checkToken($jwt, $key, $getIdentity = false)
+    {
         $auth = false;
 
-        try{
-            $decode = JWT::decode($jwt, $key, array('HS256'));
-        }catch (\UnexpectedValueException $e){
+        try {
+            $decode = JWT::decode($jwt, $key, ['HS256']);
+        } catch (\UnexpectedValueException $e) {
             $auth = false;
-        }catch (\DomainException $e){
+        } catch (\DomainException $e) {
             $auth = false;
         }
 
-        if (isset($decode->sub))
+        if (isset($decode->sub)) {
             $auth = true;
+        }
 
-        if ($getIdentity)
+        if ($getIdentity) {
             return $decode;
-        else
+        } else {
             return $auth;
+        }
     }
 }
