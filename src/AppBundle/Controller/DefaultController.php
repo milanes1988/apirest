@@ -8,6 +8,12 @@ use Nelmio\ApiDocBundle\Annotation as Nelmio;
 
 class DefaultController extends Controller
 {
+    public function indexAction(Request $request)
+    {
+        echo 'ApiRest for aplications Angular2';
+        exit;
+    }
+
     /**
      * @Nelmio\ApiDoc(
      *  resource=true,

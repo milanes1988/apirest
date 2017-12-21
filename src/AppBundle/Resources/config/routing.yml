@@ -10,3 +10,7 @@ video:
     resource: "@AppBundle/Resources/config/routing/video.yml"
     prefix:   /video
 
+comment:
+    resource: "@AppBundle/Resources/config/routing/comment.yml"
+    prefix:   /comment
+
