@@ -1,4 +1,43 @@
 services:
     app-helpers:
-       class: AppBundle\Resources\config\services\Helpers
+       class: AppBundle\Resources\Services\Helpers
        arguments: ["null"]
+
+    app-jwtauth:
+       class: AppBundle\Resources\Services\JwtAuth
+       abstract:  false
+       arguments:
+          - '@doctrine.orm.entity_manager'
+          - '@validator'
+          - '@app-helpers'
+
+    app-user:
+       class: AppBundle\Resources\Services\Users
+       abstract:  false
+       arguments:
+          - '@doctrine.orm.entity_manager'
+          - '@validator'
+          - '@app-helpers'
+          - '@app-jwtauth'
+          - '%kernel.root_dir%'
+
+    app-video:
+       class: AppBundle\Resources\Services\Videos
+       abstract:  false
+       arguments:
+          - '@doctrine.orm.entity_manager'
+          - '@validator'
+          - '@app-helpers'
+          - '@app-jwtauth'
+          - '@knp_paginator'
+
+
+    app-comment:
+        class: AppBundle\Resources\Services\Comments
+        abstract:  false
+        arguments:
+           - '@doctrine.orm.entity_manager'
+           - '@validator'
+           - '@app-helpers'
+           - '@app-jwtauth'
+           - '@knp_paginator'

@@ -3,3 +3,13 @@ default:
     prefix:   /
 
 
+app.annotation:
+    resource: "@AppBundle/Controller"
+    type:     annotation
+
+
+_apidoc:
+    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
+    prefix:   /api/doc
+
+

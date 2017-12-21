@@ -5,7 +5,7 @@ namespace BackBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * User
+ * User.
  *
  * @ORM\Table(name="users")
  * @ORM\Entity
@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class User
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -70,12 +70,10 @@ class User
      */
     private $createdAt;
 
-
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -83,7 +81,7 @@ class User
     }
 
     /**
-     * Set role
+     * Set role.
      *
      * @param string $role
      *
@@ -97,7 +95,7 @@ class User
     }
 
     /**
-     * Get role
+     * Get role.
      *
      * @return string
      */
@@ -107,7 +105,7 @@ class User
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
      *
@@ -121,7 +119,7 @@ class User
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -131,7 +129,7 @@ class User
     }
 
     /**
-     * Set surname
+     * Set surname.
      *
      * @param string $surname
      *
@@ -145,7 +143,7 @@ class User
     }
 
     /**
-     * Get surname
+     * Get surname.
      *
      * @return string
      */
@@ -155,7 +153,7 @@ class User
     }
 
     /**
-     * Set email
+     * Set email.
      *
      * @param string $email
      *
@@ -169,7 +167,7 @@ class User
     }
 
     /**
-     * Get email
+     * Get email.
      *
      * @return string
      */
@@ -179,7 +177,7 @@ class User
     }
 
     /**
-     * Set password
+     * Set password.
      *
      * @param string $password
      *
@@ -193,7 +191,7 @@ class User
     }
 
     /**
-     * Get password
+     * Get password.
      *
      * @return string
      */
@@ -203,7 +201,7 @@ class User
     }
 
     /**
-     * Set image
+     * Set image.
      *
      * @param string $image
      *
@@ -217,7 +215,7 @@ class User
     }
 
     /**
-     * Get image
+     * Get image.
      *
      * @return string
      */
@@ -227,7 +225,7 @@ class User
     }
 
     /**
-     * Set createdAt
+     * Set createdAt.
      *
      * @param \DateTime $createdAt
      *
@@ -241,7 +239,7 @@ class User
     }
 
     /**
-     * Get createdAt
+     * Get createdAt.
      *
      * @return \DateTime
      */
